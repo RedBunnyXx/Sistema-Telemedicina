@@ -32,6 +32,14 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador principal del área de paciente.
+ *
+ * Gestiona las vistas de:
+ * - Dashboard de inicio (/inicio).
+ * - Perfil del usuario (/perfil) y actualización de datos/foto.
+ * - Listado de citas (/citas) y flujo de agendamiento (/agendamiento).
+ */
 @Controller
 public class inicioController {
 
@@ -128,6 +136,15 @@ public class inicioController {
                 Paciente paciente = pacienteRepository.findById(persona.getId()).orElse(null);
                 if (paciente != null) {
                     model.addAttribute("paciente", paciente);
+                }
+
+                if (persona.getFotoPerfil() != null && !persona.getFotoPerfil().isEmpty()) {
+                    Path uploadDir = Paths.get("uploads", "perfiles");
+                    Path fotoPath = uploadDir.resolve(persona.getFotoPerfil());
+                    if (!Files.exists(fotoPath)) {
+                        persona.setFotoPerfil(null);
+                        personaRepository.save(persona);
+                    }
                 }
             }
         }

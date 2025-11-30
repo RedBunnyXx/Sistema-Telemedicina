@@ -18,6 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+/**
+ * Controlador REST para la gestión de citas.
+ *
+ * Actualmente expone el endpoint POST /api/citas que permite al paciente
+ * autenticado crear una nueva cita a partir de los datos enviados por
+ * el frontend de agendamiento.
+ */
 @RestController
 @RequestMapping("/api/citas")
 public class CitaController {

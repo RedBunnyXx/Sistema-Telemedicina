@@ -11,6 +11,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+/**
+ * Configuración central de seguridad para la plataforma.
+ *
+ * Define:
+ * - Las rutas públicas (index, login, recursos estáticos).
+ * - El formulario de autenticación en /login.
+ * - El endpoint de cierre de sesión en /logout, que redirige a /login?logout.
+ */
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;

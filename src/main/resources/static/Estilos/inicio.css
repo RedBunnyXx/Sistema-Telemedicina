@@ -60,6 +60,10 @@ body {
     font-size: 0.8rem;
 }
 
+.sidebar .nav-link.logout-link:hover {
+    color: #dc3545;
+}
+
 
 /* ---- Contenido Principal (Main Content) ---- */
 .main-content {

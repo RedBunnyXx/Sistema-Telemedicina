@@ -32,15 +32,20 @@
             </a>
         </nav>
 
-        <div class="user-profile mt-auto d-flex align-items-center">
-            <img th:if="${persona != null and persona.fotoPerfil != null}"
-                 th:src="@{'/uploads/perfiles/' + ${persona.fotoPerfil}}"
-                 alt="Avatar" class="rounded-circle me-2" width="40" height="40">
-            <img th:if="${persona == null or persona.fotoPerfil == null}"
-                 src="https://via.placeholder.com/40" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
-            <div>
-                <span class="fw-bold d-block" th:text="${nombreCompleto} != null ? ${nombreCompleto} : 'Usuario'">Usuario</span>
-                <small class="text-muted" th:text="${tipoPersona} != null ? ${tipoPersona} : 'Paciente'">Paciente</small>
+        <div class="sidebar-footer mt-auto">
+            <a class="nav-link logout-link mb-2" th:href="@{/logout}">
+                <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+            </a>
+            <div class="user-profile d-flex align-items-center">
+                <img th:if="${persona != null and persona.fotoPerfil != null}"
+                     th:src="@{'/uploads/perfiles/' + ${persona.fotoPerfil}}"
+                     alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+                <img th:if="${persona == null or persona.fotoPerfil == null}"
+                     src="https://via.placeholder.com/40" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+                <div>
+                    <span class="fw-bold d-block" th:text="${nombreCompleto} != null ? ${nombreCompleto} : 'Usuario'">Usuario</span>
+                    <small class="text-muted" th:text="${tipoPersona} != null ? ${tipoPersona} : 'Paciente'">Paciente</small>
+                </div>
             </div>
         </div>
     </aside>
