@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Citas - MediConnect</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/Estilos/inicio.css}">
+    <link rel="stylesheet" th:href="@{/Estilos/citas.css}">
+</head>
+<body>
+
+    <div class="dashboard-wrapper d-flex">
+
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+        <main class="main-content flex-grow-1 p-4 p-md-5">
+
+            <div class="main-container">
+                
+                <header class="page-header">
+                    <div class="header-text">
+                        <h1>Mis Citas Médicas</h1>
+                        <p>Gestiona tus consultas médicas virtuales</p>
+                    </div>
+                    <a class="btn-new-appointment" th:href="@{/agendamiento}">
+                        <i class="fa-solid fa-plus"></i> Nueva Cita
+                    </a>
+                </header>
+
+                <div class="tabs-container">
+                    <button class="tab-btn active" onclick="openTab(event, 'proximas')">Próximas</button>
+                    <button class="tab-btn" onclick="openTab(event, 'historial')">Historial</button>
+                </div>
+
+                <div id="proximas" class="tab-content active-content">
+                    <div class="appointments-grid">
+                        <div class="appointment-card" th:each="cita : ${citasProximas}">
+                            <div class="card-header">
+                                <div class="doctor-info">
+                                    <div class="avatar" th:text="${#strings.substring(cita.medico.persona.nombres, 0, 1)}">D</div>
+                                    <div class="details">
+                                        <h3 th:text="${cita.medico.persona.nombres + ' ' + cita.medico.persona.apellidos}">Dr. Nombre</h3>
+                                        <span th:text="${cita.medico.especialidad.nombre}">Especialidad</span>
+                                    </div>
+                                </div>
+                                <span class="status-badge programmed"
+                                      th:classappend="${cita.estado == 'Atendida'} ? ' completed' : (cita.estado == 'Cancelada' ? ' canceled' : ' programmed')"
+                                      th:text="${cita.estado == 'Pendiente' ? 'Programada' : cita.estado}">Programada</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-item">
+                                    <i class="fa-regular fa-calendar"></i>
+                                    <span th:text="${#temporals.format(cita.fechaCita, 'd ''de'' MMMM')}">15 de octubre</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <span th:text="${#temporals.format(cita.fechaCita, 'HH:mm')}">10:00</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn-join">
+                                    <i class="fa-solid fa-video"></i> Unirse a la Consulta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="historial" class="tab-content">
+                    <div class="appointments-grid">
+                        <div class="appointment-card history-card" th:each="cita : ${citasHistorial}">
+                            <div class="card-header">
+                                <div class="doctor-info">
+                                    <div class="avatar" th:text="${#strings.substring(cita.medico.persona.nombres, 0, 1)}">D</div>
+                                    <div class="details">
+                                        <h3 th:text="${cita.medico.persona.nombres + ' ' + cita.medico.persona.apellidos}">Dr. Nombre</h3>
+                                        <span th:text="${cita.medico.especialidad.nombre}">Especialidad</span>
+                                    </div>
+                                </div>
+                                <span class="status-badge completed"
+                                      th:classappend="${cita.estado == 'Cancelada'} ? ' canceled' : ' completed'"
+                                      th:text="${cita.estado}">Completada</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-item">
+                                    <i class="fa-regular fa-calendar"></i>
+                                    <span th:text="${#temporals.format(cita.fechaCita, 'd ''de'' MMMM')}">20 de septiembre</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <span th:text="${#temporals.format(cita.fechaCita, 'HH:mm')}">14:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/JavaScript/citas.js}"></script>
+
+</body>
+</html>

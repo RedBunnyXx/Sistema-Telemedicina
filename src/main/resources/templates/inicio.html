@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Paciente - MediConnect</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/Estilos/inicio.css}">
+</head>
+<body>
+
+<div class="dashboard-wrapper d-flex">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-content flex-grow-1 p-4 p-md-5">
+
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 fw-bold">Bienvenido a MediConnect</h1>
+                <p class="text-muted">Gestiona tu salud desde un solo lugar</p>
+            </div>
+        </header>
+
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-start">
+                        <div>
+                            <small class="text-muted">Próximas Citas</small>
+                            <h2 class="fw-bold display-5 my-1" th:text="${proximasCitasCount}">0</h2>
+                            <span class="text-muted small">Este mes</span>
+                        </div>
+                        <i class="bi bi-calendar-event text-primary fs-3"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-start">
+                        <div>
+                            <small class="text-muted">Recetas Activas</small>
+                            <h2 class="fw-bold display-5 my-1" th:text="${recetasActivasCount}">0</h2>
+                            <span class="text-muted small">En proceso</span>
+                        </div>
+                        <i class="bi bi-prescription2 text-primary fs-3"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-start">
+                        <div>
+                            <small class="text-muted">Resultados Nuevos</small>
+                            <h2 class="fw-bold display-5 my-1" th:text="${resultadosNuevosCount}">0</h2>
+                            <span class="text-muted small">Disponible</span>
+                        </div>
+                        <i class="bi bi-file-earmark-text text-primary fs-3"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-start">
+                        <div>
+                            <small class="text-muted">Consultas Totales</small>
+                            <h2 class="fw-bold display-5 my-1" th:text="${consultasTotalesCount}">0</h2>
+                            <span class="text-success small">+15%</span>
+                            <span class="text-muted small">desde el mes pasado</span>
+                        </div>
+                        <i class="bi bi-bar-chart-line text-primary fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-lg-7">
+                <h5 class="mb-3 fw-bold">Próximas Citas</h5>
+
+                <div class="card appointment-card mb-3" th:if="${#lists.isEmpty(citasProximasDashboard)}">
+                    <div class="card-body text-muted small">
+                        No tienes próximas citas programadas.
+                    </div>
+                </div>
+
+                <div class="card appointment-card mb-3" th:each="cita : ${citasProximasDashboard}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h6 class="fw-bold mb-0"
+                                    th:text="${'Dr. ' + cita.medico.persona.nombres + ' ' + cita.medico.persona.apellidos}">Dr. Nombre</h6>
+                                <small class="text-muted" th:text="${cita.medico.especialidad.nombre}">Medicina General</small>
+                            </div>
+                            <span class="badge rounded-pill bg-primary"
+                                  th:text="${cita.estado == 'Pendiente' ? 'Programada' : cita.estado}">Programada</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    <span th:text="${#temporals.format(cita.fechaCita, 'd ''de'' MMMM')}">15 de octubre</span>
+                                    <i class="bi bi-clock ms-2 me-1"></i>
+                                    <span th:text="${#temporals.format(cita.fechaCita, 'h:mm a')}">10:00 AM</span>
+                                </span>
+                            <a href="#" class="btn btn-primary btn-sm px-3">
+                                <i class="bi bi-camera-video me-1"></i> Unirse a la Consulta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <h5 class="mb-3 fw-bold">Recetas Recientes</h5>
+
+                <div class="card prescription-card mb-3" th:if="${#lists.isEmpty(recetasRecientes)}">
+                    <div class="card-body text-muted small">
+                        No tienes recetas recientes.
+                    </div>
+                </div>
+
+                <!-- Cuando exista el modelo de Receta y se carguen datos reales, aquí se podrá iterar sobre la lista -->
+                <!--
+                <div class="card prescription-card mb-3" th:each="receta : ${recetasRecientes}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="fw-bold" th:text="${receta.medicamento}">Amoxicilina 500mg</h6>
+                            <span class="badge rounded-pill bg-primary" th:text="${receta.estado}">Procesando</span>
+                        </div>
+                        <p class="text-muted small mb-2" th:text="${receta.indicaciones}">1 cápsula cada 8 horas por 7 días</p>
+                        <small class="text-muted d-block">Recetado por: <strong th:text="${receta.medicoNombre}">Dr. Nombre</strong></small>
+                        <small class="text-muted d-block">Fecha: <span th:text="${#temporals.format(receta.fecha, 'd ''de'' MMMM, yyyy')}">10 de octubre, 2025</span></small>
+                        <small class="text-muted d-block"><i class="bi bi-shop me-1"></i> <span th:text="${receta.farmacia}">Farmacia Central</span></small>
+                        <hr class="my-2">
+                        <a href="#" class="text-primary text-decoration-none small fw-medium">
+                            <i class="bi bi-download me-1"></i> Descargar
+                        </a>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+
+        <div>
+            <h5 class="mb-3 fw-bold">Resultados de Laboratorio</h5>
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-5 col-xl-4" th:if="${#lists.isEmpty(resultadosLaboratorio)}">
+                    <div class="card lab-result-card">
+                        <div class="card-body text-muted small">
+                            No tienes resultados de laboratorio.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5 col-xl-4" th:each="resultado : ${resultadosLaboratorio}">
+                    <div class="card lab-result-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="fw-bold" th:text="${resultado.nombrePrueba}">Hemograma Completo</h6>
+                                <span class="badge rounded-pill"
+                                      th:classappend="${resultado.estado == 'Listo'} ? ' bg-primary' : ' bg-light text-dark border'"
+                                      th:text="${resultado.estado}">Resultados Listos</span>
+                            </div>
+                            <small class="text-muted d-block">
+                                Solicitado por:
+                                <strong th:text="${resultado.medicoNombre}">Dr. Carlos Ruiz</strong>
+                            </small>
+                            <small class="text-muted d-block">
+                                Fecha:
+                                <span th:text="${#temporals.format(resultado.fecha, 'dd ''de'' MMMM, yyyy')}">08 de octubre, 2025</span>
+                            </small>
+                            <small class="text-muted d-block">
+                                Resultado:
+                                <strong th:text="${resultado.resumen}">Normal</strong>
+                            </small>
+                            <hr>
+                            <div class="d-flex justify-content-start gap-2">
+                                <a th:if="${resultado.urlPdf != null}"
+                                   th:href="${resultado.urlPdf}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-download me-1"></i> Descargar PDF
+                                </a>
+                                <a th:if="${resultado.id != null}"
+                                   th:href="@{'/resultados/' + ${resultado.id}}"
+                                   class="btn btn-primary btn-sm">
+                                    <i class="bi bi-eye me-1"></i> Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

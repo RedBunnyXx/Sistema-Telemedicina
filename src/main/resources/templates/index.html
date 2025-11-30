@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleSalud Conecta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/Estilos/index.css}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-notes-medical logo-icon"></i>
+                <span>TeleSalud <br> Conecta</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Especialistas</a></li>
+                <li><a href="#">Cómo Funciona</a></li>
+                <li><a th:href="@{/login}" class="login-link">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="background-wave"></div>
+
+        <div class="container hero-container">
+            <div class="hero-text">
+                <h1>Tu Salud, <br> <span class="highlight">Sin Barreras.</span></h1>
+
+                <p>
+                    Facilitamos el acceso a consultas médicas de calidad desde la comodidad de tu hogar. 
+                    Conecta con doctores certificados, agenda citas y recibe atención personalizada 
+                    de forma rápida y segura.
+                </p>
+                <a th:href="@{/login}" class="btn-primary">Comenzar ahora</a>
+            </div>
+
+            <div class="hero-image">
+                <img src="https://img.freepik.com/free-photo/doctor-consulting-patient-online_23-2148868973.jpg?w=900&t=st=1700000000~exp=1700000000~hmac=fakeurl" 
+                     alt="Consulta médica en tablet" 
+                     class="img-fluid">
+            </div>
+        </div>
+    </header>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <aside th:fragment="sidebar" class="sidebar bg-white d-flex flex-column">
+        <div class="sidebar-header">
+            <a href="#" class="d-flex align-items-center text-decoration-none">
+                <span class="fs-4 fw-bold text-primary">MediConnect</span>
+                <span class="badge bg-light text-dark ms-2">Asistente</span>
+            </a>
+        </div>
+
+        <nav class="nav nav-pills flex-column mt-4">
+            <span class="nav-section-title text-muted small text-uppercase mb-2">Mi Salud</span>
+            <a class="nav-link" th:classappend="${activePage} == 'inicio' ? ' active'" th:href="@{/inicio}">
+                <i class="bi bi-house-door-fill me-2"></i> Inicio
+            </a>
+            <a class="nav-link" th:classappend="${activePage} == 'perfil' ? ' active'" th:href="@{/perfil}">
+                <i class="bi bi-person-circle me-2"></i> Mi perfil
+            </a>
+            <a class="nav-link" th:classappend="${activePage} == 'citas' ? ' active'" th:href="@{/citas}">
+                <i class="bi bi-calendar-check me-2"></i> Mis Citas
+            </a>
+            <a class="nav-link" href="#">
+                <i class="bi bi-file-earmark-medical me-2"></i> Recetas
+            </a>
+            <a class="nav-link" href="#">
+                <i class="bi bi-heart-pulse me-2"></i> Resultados de Laboratorio
+            </a>
+            <a class="nav-link" href="#">
+                <i class="bi bi-megaphone me-2"></i> Campañas de Salud
+            </a>
+        </nav>
+
+        <div class="user-profile mt-auto d-flex align-items-center">
+            <img th:if="${persona != null and persona.fotoPerfil != null}"
+                 th:src="@{'/uploads/perfiles/' + ${persona.fotoPerfil}}"
+                 alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+            <img th:if="${persona == null or persona.fotoPerfil == null}"
+                 src="https://via.placeholder.com/40" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+            <div>
+                <span class="fw-bold d-block" th:text="${nombreCompleto} != null ? ${nombreCompleto} : 'Usuario'">Usuario</span>
+                <small class="text-muted" th:text="${tipoPersona} != null ? ${tipoPersona} : 'Paciente'">Paciente</small>
+            </div>
+        </div>
+    </aside>
+
+</body>
+</html>

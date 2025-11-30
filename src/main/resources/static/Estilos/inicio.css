@@ -1,0 +1,136 @@
+
+/* ---- Configuración General ---- */
+body {
+    background-color: #f8f9fa; /* Fondo gris claro para el dashboard */
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---- Barra Lateral (Sidebar) ---- */
+.sidebar {
+    width: 260px; /* Ancho fijo para la barra lateral */
+    min-height: 100vh;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+    padding: 1.5rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar-header .badge {
+    font-size: 0.7rem;
+    padding: 0.3em 0.6em;
+}
+
+.sidebar .nav-link {
+    color: #5a6a85; /* Color de texto para enlaces inactivos */
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    border-radius: 0.5rem; /* Bordes redondeados */
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.1rem;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa; /* Fondo claro al pasar el mouse */
+    color: var(--bs-primary); /* <-- ASÍ */ /* Color primario al pasar el mouse */
+}
+
+/* Estilo para el enlace ACTIVO */
+.sidebar .nav-link.active {
+    background-color: var(--custom-primary-light-bg); /* <-- ASÍ */
+    color: var(--bs-primary); /* <-- ASÍ */
+}
+
+.sidebar .user-profile {
+    border-top: 1px solid #e9ecef;
+    padding-top: 1.25rem;
+    margin-top: 1.5rem; /* Se asegura que esté pegado abajo (con mt-auto en HTML) */
+}
+
+.sidebar .user-profile .fw-bold {
+    font-size: 0.9rem;
+}
+.sidebar .user-profile .text-muted {
+    font-size: 0.8rem;
+}
+
+
+/* ---- Contenido Principal (Main Content) ---- */
+.main-content {
+    /* El padding se aplica en el HTML (p-4 p-md-5) */
+    overflow-y: auto; /* Permite scroll si el contenido es largo */
+}
+
+/* ---- Tarjetas (Cards) ---- */
+.card {
+    border: none; /* Quitamos el borde por defecto */
+    border-radius: 0.75rem; /* Bordes más redondeados que el default */
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04); /* Sombra suave */
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.07);
+}
+
+/* Tarjetas de estadísticas */
+.stat-card .text-muted {
+    font-size: 0.9rem;
+}
+.stat-card .fs-3 {
+    opacity: 0.7; /* Ícono semi-transparente */
+}
+
+/* Tarjetas de citas y recetas */
+.appointment-card .btn-sm {
+    padding: 0.3rem 1rem;
+    font-weight: 500;
+}
+
+.prescription-card hr,
+.lab-result-card hr {
+    color: #e9ecef;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.prescription-card .badge,
+.lab-result-card .badge {
+    font-weight: 500;
+    padding: 0.4em 0.8em;
+}
+
+/* Ajuste para el badge 'Entregado' y 'Pendiente' */
+.badge.border {
+    border-color: #dee2e6 !important;
+}
+
+/* Ajuste de botones en resultados */
+.lab-result-card .btn-sm {
+    font-weight: 500;
+    padding: 0.3rem 0.8rem;
+}
+
+/* ---- 1. Definición de Color Primario ---- */
+:root {
+  --bs-primary: #0F82C7;
+  --bs-primary-rgb: 15, 130, 199;
+
+  /* He generado un tono más claro de tu azul para los fondos */
+  --custom-primary-light-bg: #e7f3fa;
+}
+
+/* ---- Sobrescritura forzada de botones (Solo si es necesario) ---- */
+
+/* Botón sólido */
+.btn-primary {
+    background-color: #0F82C7;
+    border-color: #0F82C7;
+}

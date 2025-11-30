@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - MediConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/Estilos/registro.css}">
+</head>
+<body>
+    <div class="main-container">
+        <div class="register-card">
+            <div class="card-header">
+                <h1 class="logo">MediConnect</h1>
+                <h2 class="subtitle">Registro de Paciente</h2>
+            </div>
+            <form th:action="@{/registro}" method="post" th:object="${registroForm}">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="nombres">Nombres</label>
+                        <input type="text" id="nombres" th:field="*{nombres}" placeholder="Nombres" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" id="apellidos" th:field="*{apellidos}" placeholder="Apellidos" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="dni">DNI</label>
+                        <input type="text" id="dni" th:field="*{dni}" placeholder="8 dígitos" maxlength="8" pattern="[0-9]{8}" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" th:field="*{telefono}" placeholder="Teléfono" required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="correo">Correo Electrónico</label>
+                        <input type="email" id="correo" th:field="*{correo}" placeholder="Correo Electrónico" required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="password">Contraseña</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" th:field="*{password}" placeholder="Contraseña" required>
+                            <i class="fa-regular fa-eye-slash toggle-password"></i>
+                        </div>
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                        <input type="date" id="fecha_nacimiento" th:field="*{fecha_nacimiento}" value="2000-01-01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="sexo">Sexo</label>
+                        <select id="sexo" th:field="*{sexo}" required>
+                            <option value="M">M</option>
+                            <option value="F">F</option>
+                        </select>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="confirm_password">Confirmar Contraseña</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirm_password" th:field="*{confirm_password}" placeholder="Confirmar Contraseña" required>
+                            <i class="fa-regular fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkbox-container">
+                    <div class="checkbox-group" th:classappend="${#fields.hasErrors('aceptaTerminos')} ? ' has-error'">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" th:field="*{aceptaTerminos}">
+                            <span class="text">He leído y acepto los <a href="#">Términos y Condiciones</a></span>
+                        </label>
+                        <span class="checkbox-error" th:if="${#fields.hasErrors('aceptaTerminos')}" th:errors="*{aceptaTerminos}"></span>
+                    </div>
+
+                    <div class="checkbox-group" th:classappend="${#fields.hasErrors('aceptaPrivacidad')} ? ' has-error'">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" th:field="*{aceptaPrivacidad}">
+                            <span class="text">Acepto la <a href="#">Política de Privacidad</a></span>
+                        </label>
+                        <span class="checkbox-error" th:if="${#fields.hasErrors('aceptaPrivacidad')}" th:errors="*{aceptaPrivacidad}"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-register">Registrarse</button>
+                <div class="form-footer">
+                    <p>¿Ya tienes cuenta? <a th:href="@{/login}">Iniciar Sesión</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+/* --- Reseteo Básico --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #333;
+    overflow-x: hidden; /* Evitar scroll horizontal por las ondas de fondo */
+}
+
+/* --- Clases de Utilidad --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Navegación --- */
+.navbar {
+    padding: 20px 0;
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #003366; /* Azul oscuro corporativo */
+    line-height: 1.1;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    color: #4facfe; /* Azul claro del logo */
+    margin-right: 10px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #003366;
+}
+
+/* --- Sección Hero --- */
+.hero-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 85vh; /* Ocupa gran parte de la pantalla */
+    padding: 50px 0;
+}
+
+/* Decoración de fondo (Onda sutil) */
+.background-wave {
+    position: absolute;
+    top: 20%;
+    left: -10%;
+    width: 60%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.05) 50%, transparent 70%);
+    z-index: -1;
+    filter: blur(40px);
+}
+
+.hero-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+/* Estilos del Texto Hero */
+.hero-text h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #002b5c; /* Azul muy oscuro */
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 90%;
+}
+
+/* Botón con degradado */
+.btn-primary {
+    display: inline-block;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    /* El degradado de izquierda a derecha (Azul a Verde Agua) */
+    background: linear-gradient(90deg, #3fa9f5 0%, #55d6aa 100%);
+    border-radius: 50px; /* Bordes totalmente redondos */
+    box-shadow: 0 10px 20px rgba(63, 169, 245, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(63, 169, 245, 0.4);
+}
+
+/* Estilos de la Imagen Hero */
+.hero-image {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 550px;
+    border-radius: 40px; /* Bordes redondeados de la foto */
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.1); /* Sombra suave */
+    object-fit: cover;
+}
+
+/* --- Responsive (Móvil) --- */
+@media (max-width: 768px) {
+    .hero-container {
+        grid-template-columns: 1fr; /* Una sola columna */
+        text-align: center;
+    }
+
+    .nav-links {
+        display: none; /* En un caso real, aquí iría un menú hamburguesa */
+    }
+
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-text p {
+        margin: 0 auto 30px auto; /* Centrar texto */
+    }
+    
+    .hero-image {
+        margin-top: 30px;
+    }
+}
