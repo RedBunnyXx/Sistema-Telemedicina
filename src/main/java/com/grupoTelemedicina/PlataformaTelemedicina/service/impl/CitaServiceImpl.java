@@ -7,6 +7,7 @@ import com.grupoTelemedicina.PlataformaTelemedicina.repository.CitaRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.MedicoRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PacienteRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.service.CitaService;
+import com.grupoTelemedicina.PlataformaTelemedicina.service.CitaService;
 
 import org.springframework.stereotype.Service;
 

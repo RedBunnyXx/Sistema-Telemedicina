@@ -6,6 +6,7 @@ import com.grupoTelemedicina.PlataformaTelemedicina.dto.PacienteDTO;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PacienteRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PersonaRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.service.PacienteService;
+import com.grupoTelemedicina.PlataformaTelemedicina.service.PacienteService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

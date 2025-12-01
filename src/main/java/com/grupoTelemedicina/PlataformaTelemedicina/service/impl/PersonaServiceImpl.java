@@ -4,6 +4,7 @@ import com.grupoTelemedicina.PlataformaTelemedicina.dto.CrearPersonaRequest;
 import com.grupoTelemedicina.PlataformaTelemedicina.Model.Persona;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PersonaRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.service.PersonaService;
+import com.grupoTelemedicina.PlataformaTelemedicina.service.PersonaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
