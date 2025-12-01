@@ -8,6 +8,7 @@ import com.grupoTelemedicina.PlataformaTelemedicina.repository.MedicoRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PacienteRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PersonaRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.service.CitaService;
+import com.grupoTelemedicina.PlataformaTelemedicina.service.RecetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,12 +51,14 @@ public class inicioController {
     private final UserDetailsService userDetailsService;
     private final MedicoRepository medicoRepository;
     private final CitaService citaService;
+    private final RecetaService recetaService;
+
 
     private static final long MAX_FOTO_SIZE = 2 * 1024 * 1024; // 2 MB
     private static final String CONTENT_TYPE_JPEG = "image/jpeg";
     private static final String CONTENT_TYPE_PNG = "image/png";
 
-    public inicioController(PersonaRepository personaRepository,
+/*    public inicioController(PersonaRepository personaRepository,
                             PacienteRepository pacienteRepository,
                             UserDetailsService userDetailsService,
                             MedicoRepository medicoRepository,
@@ -65,7 +68,22 @@ public class inicioController {
         this.userDetailsService = userDetailsService;
         this.medicoRepository = medicoRepository;
         this.citaService = citaService;
-    }
+    }*/
+public inicioController(PersonaRepository personaRepository,
+                        PacienteRepository pacienteRepository,
+                        UserDetailsService userDetailsService,
+                        MedicoRepository medicoRepository,
+                        CitaService citaService,
+                        RecetaService recetaService) {
+    this.personaRepository = personaRepository;
+    this.pacienteRepository = pacienteRepository;
+    this.userDetailsService = userDetailsService;
+    this.medicoRepository = medicoRepository;
+    this.citaService = citaService;
+    this.recetaService = recetaService;
+}
+
+
 
     @GetMapping({"/", "/index"})
     public String index() {
@@ -173,6 +191,31 @@ public class inicioController {
         }
         return "citas";
     }
+    
+@GetMapping("/recetas")
+    public String recetas(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails != null) {
+            String correo = userDetails.getUsername();
+            Persona persona = personaRepository.findByCorreo(correo).orElse(null);
+            if (persona != null) {
+                model.addAttribute("persona", persona);
+                model.addAttribute("nombreCompleto", persona.getNombres() + " " + persona.getApellidos());
+                model.addAttribute("tipoPersona", persona.getTipoPersona());
+                model.addAttribute("activePage", "recetas");
+
+                Paciente paciente = pacienteRepository.findById(persona.getId()).orElse(null);
+                if (paciente != null) {
+                    var recetas = recetaService.obtenerHistorialPorPaciente(paciente.getId());
+                    model.addAttribute("recetas", recetas);
+                } else {
+                    model.addAttribute("recetas", java.util.Collections.emptyList());
+                }
+            }
+        }
+        return "recetas"; // templates/recetas.html
+}
+
+
 
     @GetMapping("/agendamiento")
     public String agendamiento(@AuthenticationPrincipal UserDetails userDetails, Model model) {
