@@ -3,6 +3,7 @@
  * @param {Event} evt - El evento del click
  * @param {string} tabName - El ID del contenedor que queremos mostrar ('proximas' o 'historial')
  */
+//citas.js
 function openTab(evt, tabName) {
     var i, tabContent, tabLinks;
 

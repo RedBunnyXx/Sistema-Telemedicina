@@ -10,20 +10,19 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/Estilos/inicio.css}">
     <link rel="stylesheet" th:href="@{/Estilos/agendamiento.css}">
+    
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 
     <div class="dashboard-wrapper d-flex">
-
         <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
         <main class="main-content flex-grow-1 p-4 p-md-5">
-
             <div class="main-container">
                 
                 <header class="page-header">
@@ -83,6 +82,7 @@
                                  th:data-name="${medico.persona.nombres + ' ' + medico.persona.apellidos}"
                                  th:data-specialty="${medico.especialidad.nombre}"
                                  th:data-cmp="${medico.cmp}"
+                                 th:data-costo="${medico.especialidad.costo}" 
                                  th:onclick="|selectDoctorCard(this)|">
                                 <div class="doctor-info-left">
                                     <div class="avatar-placeholder">
@@ -101,7 +101,7 @@
                                             <strong>CMP: </strong>
                                             <span th:text="${medico.cmp}">000000</span>
                                         </div>
-                                        <div style="margin-top:5px; font-size:12px; color:#666">Próxima disponibilidad: Hoy, 3:00 PM</div>
+                                        <div style="margin-top:5px; font-size:12px; color:#666">Precio Consulta: S/ <span th:text="${medico.especialidad.costo}">0.00</span></div>
                                     </div>
                                 </div>
                                 <span class="badge-status">Disponible</span>
@@ -143,11 +143,8 @@
                                     <h4>Mañana</h4>
                                     <div class="slots-grid">
                                         <button class="time-slot" onclick="selectTime(this)">08:00</button>
-                                        <button class="time-slot" onclick="selectTime(this)">08:30</button>
                                         <button class="time-slot" onclick="selectTime(this)">09:00</button>
-                                        <button class="time-slot" onclick="selectTime(this)">09:30</button>
                                         <button class="time-slot" onclick="selectTime(this)">10:00</button>
-                                        <button class="time-slot" onclick="selectTime(this)">10:30</button>
                                         <button class="time-slot" onclick="selectTime(this)">11:00</button>
                                     </div>
                                 </div>
@@ -156,11 +153,8 @@
                                     <h4>Tarde</h4>
                                     <div class="slots-grid">
                                         <button class="time-slot selected-time" onclick="selectTime(this)">14:00</button>
-                                        <button class="time-slot" onclick="selectTime(this)">14:30</button>
                                         <button class="time-slot" onclick="selectTime(this)">15:00</button>
-                                        <button class="time-slot" onclick="selectTime(this)">15:30</button>
                                         <button class="time-slot" onclick="selectTime(this)">16:00</button>
-                                        <button class="time-slot" onclick="selectTime(this)">16:30</button>
                                     </div>
                                 </div>
 
@@ -178,16 +172,19 @@
 
                     <div id="step-3" class="step-section">
                         <div class="section-title">
-                            <h2>Confirma tu Cita</h2>
-                            <p>Revisa los detalles y confirma tu cita médica</p>
+                            <h2>Confirma y Paga tu Cita</h2>
+                            <p>Revisa los detalles y realiza el pago seguro</p>
                         </div>
 
                         <div class="confirmation-card">
                             <div class="confirm-icon">
-                                <i class="fa-solid fa-check"></i>
+                                <i class="fa-solid fa-credit-card"></i>
                             </div>
-                            <h3>Confirmar Cita Médica</h3>
-                            <p>Revisa los detalles de tu cita antes de confirmar</p>
+                            <h3>Resumen de la Cita</h3>
+                            
+                            <p style="font-size: 1.3rem; color: #0e82cd; font-weight: bold; margin: 15px 0;">
+                                Total a Pagar: S/ <span id="displayPrecio">0.00</span>
+                            </p>
 
                             <div class="summary-doctor">
                                 <div class="avatar-circle" id="summaryAvatar">D</div>
@@ -202,14 +199,14 @@
                                     <i class="fa-regular fa-calendar"></i>
                                     <div>
                                         <small>Fecha</small>
-                                        <strong id="summaryDate">sábado, 29 de noviembre</strong>
+                                        <strong id="summaryDate">Fecha</strong>
                                     </div>
                                 </div>
                                 <div class="summary-item">
                                     <i class="fa-regular fa-clock"></i>
                                     <div>
                                         <small>Hora</small>
-                                        <strong id="summaryTime">14:00</strong>
+                                        <strong id="summaryTime">Hora</strong>
                                     </div>
                                 </div>
                                 <div class="summary-item full-width">
@@ -221,25 +218,27 @@
                                 </div>
                             </div>
 
-                            <div class="info-box">
-                                <h4>Información importante</h4>
-                                <ul>
-                                    <li>Recibirás un recordatorio 24 horas antes de tu cita</li>
-                                    <li>Podrás unirte a la videollamada 5 minutos antes de la hora programada</li>
-                                    <li>Ten a la mano tu historial médico y lista de medicamentos actuales</li>
-                                </ul>
+                            <div style="background-color: #f8fbff; padding: 25px; border-radius: 12px; border: 1px solid #cce5ff; margin-top: 25px; text-align: left;">
+                                <h5 style="margin-bottom: 15px; color: #333; font-size: 16px;"><i class="fa-solid fa-lock"></i> Pago Seguro con Tarjeta</h5>
+                                <form id="payment-form">
+                                    <div id="payment-element">
+                                        </div>
+                                    <div id="payment-message" style="color: #dc3545; margin-top: 10px; display: none; font-size: 14px;"></div>
+                                </form>
                             </div>
+
                         </div>
 
                         <div class="step-footer">
                             <button class="btn-secondary" onclick="prevStep(2)">Volver</button>
-                            <button class="btn-primary" onclick="showSuccessModal()">Confirmar Cita</button>
+                            <button class="btn-primary" id="btn-pay-confirm" onclick="procesarPagoYConfirmar()">
+                                Pagar y Confirmar Cita
+                            </button>
                         </div>
                     </div>
 
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -250,28 +249,27 @@
                 <i class="fa-solid fa-check"></i>
             </div>
             <h2>Cita Confirmada</h2>
-            <p>Tu cita ha sido programada exitosamente</p>
+            <p>Tu cita ha sido pagada y programada exitosamente</p>
             
             <div class="modal-summary">
                 <div class="modal-item">
                     <i class="fa-regular fa-calendar"></i>
                     <div>
                         <small>Fecha y hora</small>
-                        <strong id="modalDateTime">sábado, 29 de noviembre a las 14:00</strong>
+                        <strong id="modalDateTime">...</strong>
                     </div>
                 </div>
                 <div class="modal-item">
                     <i class="fa-solid fa-user-doctor"></i>
                     <div>
                         <small>Especialista</small>
-                        <strong id="modalDoctorName">Dr. Juan Pérez</strong>
+                        <strong id="modalDoctorName">...</strong>
                     </div>
                 </div>
             </div>
 
             <p class="email-notice">
                 <i class="fa-regular fa-envelope"></i> Recibirás una confirmación por correo electrónico<br>
-                <i class="fa-regular fa-bell"></i> Te notificaremos antes de la cita
             </p>
 
             <div class="modal-actions">
@@ -283,6 +281,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/JavaScript/agendamiento.js}"></script>
-
+    
 </body>
 </html>

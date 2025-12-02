@@ -1,6 +1,7 @@
 package com.grupoTelemedicina.PlataformaTelemedicina.Model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Especialidades")
@@ -13,6 +14,9 @@ public class Especialidad {
 
     @Column(nullable = false, length = 100, unique = true)
     private String nombre;
+    
+    @Column(name = "costo",nullable = false, precision = 10, scale = 2)
+    private BigDecimal costo;
 
     public Integer getId() {
         return id;
@@ -29,4 +33,14 @@ public class Especialidad {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
+    
 }

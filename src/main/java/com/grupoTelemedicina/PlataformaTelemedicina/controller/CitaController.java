@@ -1,11 +1,10 @@
 package com.grupoTelemedicina.PlataformaTelemedicina.controller;
 
-import com.grupoTelemedicina.PlataformaTelemedicina.Model.Cita;
-import com.grupoTelemedicina.PlataformaTelemedicina.Model.Paciente;
-import com.grupoTelemedicina.PlataformaTelemedicina.Model.Persona;
-import com.grupoTelemedicina.PlataformaTelemedicina.repository.PacienteRepository;
-import com.grupoTelemedicina.PlataformaTelemedicina.repository.PersonaRepository;
+import com.grupoTelemedicina.PlataformaTelemedicina.Model.*;
+import com.grupoTelemedicina.PlataformaTelemedicina.repository.*;
 import com.grupoTelemedicina.PlataformaTelemedicina.service.CitaService;
+import com.grupoTelemedicina.PlataformaTelemedicina.service.EmailService;
+import java.math.BigDecimal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,13 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Controlador REST para la gesti√≥n de citas.
- *
- * Actualmente expone el endpoint POST /api/citas que permite al paciente
- * autenticado crear una nueva cita a partir de los datos enviados por
- * el frontend de agendamiento.
- */
 @RestController
 @RequestMapping("/api/citas")
 public class CitaController {
@@ -32,47 +24,78 @@ public class CitaController {
     private final CitaService citaService;
     private final PersonaRepository personaRepository;
     private final PacienteRepository pacienteRepository;
+    private final PagoRepository pagoRepository;
+    private final MedicoRepository medicoRepository;
+    private final CitaRepository citaRepository; 
+    private final EmailService emailService; 
 
     public CitaController(CitaService citaService,
                           PersonaRepository personaRepository,
-                          PacienteRepository pacienteRepository) {
+                          PacienteRepository pacienteRepository,
+                          PagoRepository pagoRepository,
+                          MedicoRepository medicoRepository,
+                          CitaRepository citaRepository,
+                          EmailService emailService) { 
         this.citaService = citaService;
         this.personaRepository = personaRepository;
         this.pacienteRepository = pacienteRepository;
+        this.pagoRepository = pagoRepository;
+        this.medicoRepository = medicoRepository;
+        this.citaRepository = citaRepository;
+        this.emailService = emailService;
     }
 
     @PostMapping
     public ResponseEntity<?> crearCita(@AuthenticationPrincipal UserDetails userDetails,
                                        @RequestBody CrearCitaRequest request) {
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        String correo = userDetails.getUsername();
-        Optional<Persona> personaOpt = personaRepository.findByCorreo(correo);
-        if (personaOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Persona persona = personaOpt.get();
-        Optional<Paciente> pacienteOpt = pacienteRepository.findById(persona.getId());
-        if (pacienteOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario autenticado no es un paciente v√°lido");
-        }
+        
+        // 1. Validaciones (SIN CAMBIOS)
+        if (userDetails == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        String correoUsuario = userDetails.getUsername(); // Este es el correo para enviar
+        Optional<Persona> personaOpt = personaRepository.findByCorreo(correoUsuario);
+        if (personaOpt.isEmpty()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        Persona personaPaciente = personaOpt.get();
+        Optional<Paciente> pacienteOpt = pacienteRepository.findById(personaPaciente.getId());
+        if (pacienteOpt.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario no v·lido");
 
         LocalDateTime fechaCita;
-        try {
-            fechaCita = LocalDateTime.parse(request.getFechaHoraIso());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Formato de fecha/hora inv√°lido");
-        }
+        try { fechaCita = LocalDateTime.parse(request.getFechaHoraIso()); } 
+        catch (Exception e) { return ResponseEntity.badRequest().body("Fecha inv·lida"); }
+        if (fechaCita.isBefore(LocalDateTime.now())) return ResponseEntity.badRequest().body("Fecha debe ser futura");
 
-        if (fechaCita.isBefore(LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("La fecha de la cita debe ser futura");
-        }
-
+        // 2. LÛgica Principal (SIN CAMBIOS)
         Cita cita = citaService.crearCitaParaPaciente(pacienteOpt.get().getId(), request.getMedicoId(), fechaCita);
+        
+        Medico medico = medicoRepository.findById(request.getMedicoId()).orElse(null);
+        BigDecimal costoReal = (medico != null) ? medico.getEspecialidad().getCosto() : new BigDecimal("80.00");
+        String nombreMedico = (medico != null) ? medico.getPersona().getNombres() + " " + medico.getPersona().getApellidos() : "Dr. Desconocido";
+        String nombreEspecialidad = (medico != null) ? medico.getEspecialidad().getNombre() : "General";
 
+        cita.setCosto(costoReal);
+        citaRepository.save(cita);
+
+        Pago pago = new Pago();
+        pago.setCita(cita);
+        pago.setMonto(costoReal);
+        pago.setFechaPago(LocalDateTime.now());
+        pago.setEstadoPago("Aprobado");
+        pago.setIdTransaccionStripe(request.getIdTransaccion()); 
+        pago.setMetodoPago("Tarjeta");
+        pagoRepository.save(pago);
+        
+        // 3. --- ENVIAR CORREO (NUEVO) ---
+        // Se envÌa de forma asÌncrona para no ralentizar la respuesta al usuario
+        emailService.sendCitaConfirmation(
+                correoUsuario, // El correo del usuario logueado
+                personaPaciente.getNombres() + " " + personaPaciente.getApellidos(),
+                nombreMedico,
+                nombreEspecialidad,
+                cita.getFechaCita(),
+                costoReal,
+                request.getIdTransaccion()
+        );
+
+        // 4. Respuesta (SIN CAMBIOS)
         CrearCitaResponse response = new CrearCitaResponse();
         response.setIdCita(cita.getId());
         response.setEstado(cita.getEstado());
@@ -81,9 +104,12 @@ public class CitaController {
         return ResponseEntity.ok(response);
     }
 
+    // Clases est·ticas Request/Response (SIN CAMBIOS)
     public static class CrearCitaRequest {
-        private Integer medicoId;
-        private String fechaHoraIso;
+        private Integer medicoId; 
+        private String fechaHoraIso; 
+        private String idTransaccion; 
+        private String metodoPago;
 
         public Integer getMedicoId() {
             return medicoId;
@@ -100,11 +126,28 @@ public class CitaController {
         public void setFechaHoraIso(String fechaHoraIso) {
             this.fechaHoraIso = fechaHoraIso;
         }
-    }
 
+        public String getIdTransaccion() {
+            return idTransaccion;
+        }
+
+        public void setIdTransaccion(String idTransaccion) {
+            this.idTransaccion = idTransaccion;
+        }
+
+        public String getMetodoPago() {
+            return metodoPago;
+        }
+
+        public void setMetodoPago(String metodoPago) {
+            this.metodoPago = metodoPago;
+        }
+        
+       
+    }
     public static class CrearCitaResponse {
-        private Integer idCita;
-        private String estado;
+        private Integer idCita; 
+        private String estado; 
         private LocalDateTime fechaHora;
 
         public Integer getIdCita() {
@@ -130,5 +173,6 @@ public class CitaController {
         public void setFechaHora(LocalDateTime fechaHora) {
             this.fechaHora = fechaHora;
         }
+       
     }
 }
