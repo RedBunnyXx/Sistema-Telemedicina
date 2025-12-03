@@ -43,8 +43,12 @@
                             <input type="password" id="password" th:field="*{password}" placeholder="Contraseña" required>
                             <i class="fa-regular fa-eye-slash toggle-password"></i>
                         </div>
-                        <div class="strength-bar">
-                            <div class="strength-fill"></div>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="confirm_password">Confirmar Contraseña</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirm_password" th:field="*{confirm_password}" placeholder="Confirmar Contraseña" required>
+                            <i class="fa-regular fa-eye-slash toggle-password"></i>
                         </div>
                     </div>
                     <div class="input-group">
@@ -57,13 +61,6 @@
                             <option value="M">M</option>
                             <option value="F">F</option>
                         </select>
-                    </div>
-                    <div class="input-group full-width">
-                        <label for="confirm_password">Confirmar Contraseña</label>
-                        <div class="password-wrapper">
-                            <input type="password" id="confirm_password" th:field="*{confirm_password}" placeholder="Confirmar Contraseña" required>
-                            <i class="fa-regular fa-eye-slash toggle-password"></i>
-                        </div>
                     </div>
                 </div>
                 <div class="checkbox-container">
@@ -90,5 +87,26 @@
             </form>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggles = document.querySelectorAll('.password-wrapper .toggle-password');
+
+            toggles.forEach(function (icon) {
+                icon.addEventListener('click', function () {
+                    const wrapper = this.parentElement;
+                    if (!wrapper) return;
+
+                    const input = wrapper.querySelector('input');
+                    if (!input) return;
+
+                    const isPassword = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isPassword ? 'text' : 'password');
+
+                    this.classList.toggle('fa-eye-slash', !isPassword);
+                    this.classList.toggle('fa-eye', isPassword);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

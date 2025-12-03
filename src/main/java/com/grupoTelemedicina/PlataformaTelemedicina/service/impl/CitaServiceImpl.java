@@ -7,7 +7,7 @@ import com.grupoTelemedicina.PlataformaTelemedicina.repository.CitaRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.MedicoRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PacienteRepository;
 import com.grupoTelemedicina.PlataformaTelemedicina.service.CitaService;
-import com.grupoTelemedicina.PlataformaTelemedicina.service.CitaService;
+import com.grupoTelemedicina.PlataformaTelemedicina.service.ZoomMeetingService;
 
 import org.springframework.stereotype.Service;
 
@@ -21,17 +21,31 @@ public class CitaServiceImpl implements CitaService {
     private final CitaRepository citaRepository;
     private final PacienteRepository pacienteRepository;
     private final MedicoRepository medicoRepository;
+    private final ZoomMeetingService zoomMeetingService;
 
     private static final BigDecimal COSTO_BASE = new BigDecimal("80.00");
 
     public CitaServiceImpl(CitaRepository citaRepository,
                            PacienteRepository pacienteRepository,
-                           MedicoRepository medicoRepository) {
+                           MedicoRepository medicoRepository,
+                           ZoomMeetingService zoomMeetingService) {
         this.citaRepository = citaRepository;
         this.pacienteRepository = pacienteRepository;
         this.medicoRepository = medicoRepository;
+        this.zoomMeetingService = zoomMeetingService;
     }
 
+    /**
+     * Implementa el servicio de agendamiento de una cita.
+     *
+     * Flujo de agendamiento:
+     * - Un controlador del flujo de agendamiento/pago llama a este método
+     *   pasando el id del paciente, el id del médico y la fecha/hora escogida.
+     * - Se validan paciente y médico, se arma la entidad Cita con estado y costo.
+     * - Se solicita a ZoomMeetingService crear la reunión de videollamada
+     *   y se guarda la URL generada en el campo zoomUrl.
+     * - Finalmente se persiste la cita en la base de datos.
+     */
     @Override
     public Cita crearCitaParaPaciente(Integer idPaciente, Integer idMedico, LocalDateTime fechaCita) {
         Paciente paciente = pacienteRepository.findById(idPaciente)
@@ -46,6 +60,11 @@ public class CitaServiceImpl implements CitaService {
         cita.setFechaCita(fechaCita);
         cita.setEstado("Pendiente");
         cita.setCosto(COSTO_BASE);
+
+        String zoomUrl = zoomMeetingService.crearReunionParaCita(cita);
+        if (zoomUrl != null && !zoomUrl.isBlank()) {
+            cita.setZoomUrl(zoomUrl);
+        }
 
         return citaRepository.save(cita);
     }

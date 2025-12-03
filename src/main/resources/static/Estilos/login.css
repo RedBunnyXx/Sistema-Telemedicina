@@ -83,7 +83,7 @@ body {
 /* Enlace '¿Olvidaste tu contraseña?' */
 .forgot {
     position: absolute;
-    right: 10px;
+    right: 40px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 14px;
@@ -93,6 +93,15 @@ body {
 
 .forgot:hover {
     text-decoration: underline;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px;
 }
 
 /* ===== BOTÓN ===== */

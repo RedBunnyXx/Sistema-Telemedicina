@@ -33,6 +33,11 @@
                     </a>
                 </header>
 
+                <div th:if="${joinError}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <span th:text="${joinError}">Ocurrió un problema al unirse a la consulta.</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
                 <div class="tabs-container">
                     <button class="tab-btn active" onclick="openTab(event, 'proximas')">Próximas</button>
                     <button class="tab-btn" onclick="openTab(event, 'historial')">Historial</button>
@@ -64,9 +69,9 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn-join">
+                                <a th:href="@{'/citas/' + ${cita.id} + '/join'}" class="btn-join">
                                     <i class="fa-solid fa-video"></i> Unirse a la Consulta
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

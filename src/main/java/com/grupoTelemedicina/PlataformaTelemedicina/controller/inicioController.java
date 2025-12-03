@@ -58,30 +58,19 @@ public class inicioController {
     private static final String CONTENT_TYPE_JPEG = "image/jpeg";
     private static final String CONTENT_TYPE_PNG = "image/png";
 
-/*    public inicioController(PersonaRepository personaRepository,
+    public inicioController(PersonaRepository personaRepository,
                             PacienteRepository pacienteRepository,
                             UserDetailsService userDetailsService,
                             MedicoRepository medicoRepository,
-                            CitaService citaService) {
+                            CitaService citaService,
+                            RecetaService recetaService) {
         this.personaRepository = personaRepository;
         this.pacienteRepository = pacienteRepository;
         this.userDetailsService = userDetailsService;
         this.medicoRepository = medicoRepository;
         this.citaService = citaService;
-    }*/
-public inicioController(PersonaRepository personaRepository,
-                        PacienteRepository pacienteRepository,
-                        UserDetailsService userDetailsService,
-                        MedicoRepository medicoRepository,
-                        CitaService citaService,
-                        RecetaService recetaService) {
-    this.personaRepository = personaRepository;
-    this.pacienteRepository = pacienteRepository;
-    this.userDetailsService = userDetailsService;
-    this.medicoRepository = medicoRepository;
-    this.citaService = citaService;
-    this.recetaService = recetaService;
-}
+        this.recetaService = recetaService;
+    }
 
 
 
@@ -90,6 +79,13 @@ public inicioController(PersonaRepository personaRepository,
         return "index";
     }
 
+    /**
+     * Dashboard principal del paciente después de un login exitoso.
+     *
+     * Usa el usuario autenticado (userDetails) para:
+     * - Buscar la Persona y el Paciente en base de datos.
+     * - Cargar en el modelo los contadores y la lista de próximas citas que se muestran en inicio.html.
+     */
     @GetMapping("/inicio")
     public String inicio(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
@@ -169,6 +165,13 @@ public inicioController(PersonaRepository personaRepository,
         return "perfil";
     }
 
+    /**
+     * Vista de "Mis Citas" para el paciente.
+     *
+     * Aquí solo se listan las citas:
+     * - Llama a CitaService.obtenerCitasProximasPorPaciente y obtenerHistorialCitasPorPaciente
+     *   para mostrar tanto las próximas citas como el historial en citas.html.
+     */
     @GetMapping("/citas")
     public String citas(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails != null) {
@@ -217,6 +220,16 @@ public inicioController(PersonaRepository personaRepository,
 
 
 
+    /**
+     * Punto de entrada al flujo de agendamiento de una nueva cita.
+     *
+     * Flujo a alto nivel:
+     * - Obtiene al paciente autenticado a partir de userDetails.
+     * - Carga en el modelo la lista de médicos disponibles para que el usuario elija.
+     * - La vista agendamiento.html usa estos datos y, al confirmar la reserva
+     *   (junto con el pago), se llamará a CitaService.crearCitaParaPaciente desde
+     *   el controlador de pago para crear efectivamente la cita en base de datos.
+     */
     @GetMapping("/agendamiento")
     public String agendamiento(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails != null) {

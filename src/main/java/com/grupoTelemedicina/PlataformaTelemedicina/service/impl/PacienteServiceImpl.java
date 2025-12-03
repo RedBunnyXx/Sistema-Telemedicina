@@ -42,6 +42,15 @@ public class PacienteServiceImpl implements PacienteService {
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado con id: " + idPaciente));
         return mapearEntidadADTO(paciente);
     }
+    /**
+     * Implementa la lógica de registro de un nuevo paciente.
+     *
+     * Este método es llamado desde AuthController después de validar el formulario
+     * de registro. Aquí se realiza la parte de negocio:
+     * - Se crea la entidad Persona con los datos básicos y se encripta la contraseña.
+     * - Luego se crea la entidad Paciente asociada a esa Persona.
+     * - Se devuelve un DTO con los datos principales del paciente creado.
+     */
     @Override
     public PacienteDTO crearPaciente(PacienteDTO dto) {
         if (dto.getPassword() == null || dto.getPassword().isBlank()) {

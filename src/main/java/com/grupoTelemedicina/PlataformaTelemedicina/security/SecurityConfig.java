@@ -27,6 +27,14 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Define las reglas de seguridad y el flujo de autenticación.
+     *
+     * Flujo de login:
+     * - El formulario de login.html envía un POST a /login con los campos 'correo' y 'password'.
+     * - Spring Security usa CustomUserDetailsService para cargar al usuario desde la base de datos.
+     * - Si las credenciales son válidas, redirige al usuario autenticado a /inicio.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

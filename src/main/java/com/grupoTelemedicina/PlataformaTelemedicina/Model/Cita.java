@@ -31,6 +31,9 @@ public class Cita {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal costo;
 
+    @Column(name = "zoom_url", length = 500)
+    private String zoomUrl;
+
     @Column(name = "fecha_registro", nullable = false)
     private LocalDateTime fechaRegistro;
 
@@ -93,5 +96,13 @@ public class Cita {
 
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public String getZoomUrl() {
+        return zoomUrl;
+    }
+
+    public void setZoomUrl(String zoomUrl) {
+        this.zoomUrl = zoomUrl;
     }
 }

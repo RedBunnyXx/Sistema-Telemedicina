@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeleSalud Conecta</title>
+    <title>MediConnect</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/Estilos/index.css}">
@@ -14,18 +14,18 @@
         <div class="container nav-container">
             <div class="logo">
                 <i class="fa-solid fa-notes-medical logo-icon"></i>
-                <span>TeleSalud <br> Conecta</span>
+                <span>MediConnect</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Especialistas</a></li>
-                <li><a href="#">Cómo Funciona</a></li>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#especialistas">Especialistas</a></li>
+                <li><a href="#como-funciona">Cómo Funciona</a></li>
                 <li><a th:href="@{/login}" class="login-link">Iniciar Sesión</a></li>
             </ul>
         </div>
     </nav>
 
-    <header class="hero-section">
+    <header class="hero-section" id="inicio">
         <div class="background-wave"></div>
 
         <div class="container hero-container">
@@ -41,12 +41,89 @@
             </div>
 
             <div class="hero-image">
-                <img src="https://img.freepik.com/free-photo/doctor-consulting-patient-online_23-2148868973.jpg?w=900&t=st=1700000000~exp=1700000000~hmac=fakeurl" 
-                     alt="Consulta médica en tablet" 
+                <img src="https://images.pexels.com/photos/8867482/pexels-photo-8867482.jpeg?auto=compress&cs=tinysrgb&w=900" 
+                     alt="Consulta de telemedicina por videollamada" 
                      class="img-fluid">
             </div>
         </div>
     </header>
+
+    <section id="especialistas" class="section specialists-section">
+        <div class="container">
+            <h2 class="section-title">Especialistas a tu servicio</h2>
+            <p class="section-subtitle">Profesionales certificados listos para atenderte en línea.</p>
+
+            <div class="specialists-grid">
+                <div class="specialist-card">
+                    <img src="https://images.pexels.com/photos/8460046/pexels-photo-8460046.jpeg?auto=compress&cs=tinysrgb&w=200" 
+                         alt="Dra. Ana Martínez - Médica General" 
+                         class="specialist-photo">
+                    <h3 class="specialist-name">Dra. Ana Martínez</h3>
+                    <p class="specialist-role">Medicina General</p>
+                    <p class="specialist-experience">Más de 8 años de experiencia en atención primaria y teleconsulta.</p>
+                </div>
+
+                <div class="specialist-card">
+                    <img src="https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=200" 
+                         alt="Dr. Carlos López - Cardiología" 
+                         class="specialist-photo">
+                    <h3 class="specialist-name">Dr. Carlos López</h3>
+                    <p class="specialist-role">Cardiología</p>
+                    <p class="specialist-experience">Enfoque en prevención y seguimiento remoto de pacientes cardiacos.</p>
+                </div>
+
+                <div class="specialist-card">
+                    <img src="https://images.pexels.com/photos/7578803/pexels-photo-7578803.jpeg?auto=compress&cs=tinysrgb&w=200" 
+                         alt="Dra. Laura Pérez - Psicología" 
+                         class="specialist-photo">
+                    <h3 class="specialist-name">Dra. Laura Pérez</h3>
+                    <p class="specialist-role">Psicología</p>
+                    <p class="specialist-experience">Acompañamiento emocional y terapia en línea adaptada a tus necesidades.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="section how-section">
+        <div class="container">
+            <h2 class="section-title">¿Cómo funciona MediConnect?</h2>
+            <p class="section-subtitle">Conéctate con tu especialista en pocos pasos.</p>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <h3 class="step-title">1. Regístrate</h3>
+                    <p class="step-text">Crea tu cuenta en minutos con tus datos básicos.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fa-solid fa-stethoscope"></i>
+                    </div>
+                    <h3 class="step-title">2. Elige tu especialista</h3>
+                    <p class="step-text">Explora el listado de profesionales y selecciona el que mejor se adapte a ti.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h3 class="step-title">3. Agenda tu cita</h3>
+                    <p class="step-text">Escoge la fecha y hora disponibles y confirma tu reserva en línea.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <h3 class="step-title">4. Conéctate a tu consulta</h3>
+                    <p class="step-text">El día de la cita, ingresa a la plataforma y únete a tu consulta por videollamada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </body>
 </html>

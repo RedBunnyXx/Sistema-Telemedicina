@@ -147,6 +147,115 @@ body {
     object-fit: cover;
 }
 
+/* --- Secciones de Contenido --- */
+.section {
+    padding: 80px 0;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #002b5c;
+    margin-bottom: 10px;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* Especialistas */
+.specialists-section {
+    background-color: #f8fbff;
+}
+
+.specialists-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.specialist-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.specialist-photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.specialist-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #002b5c;
+    margin-bottom: 5px;
+}
+
+.specialist-role {
+    font-size: 0.95rem;
+    color: #4facfe;
+    margin-bottom: 8px;
+}
+
+.specialist-experience {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* Cómo Funciona */
+.how-section {
+    background-color: #ffffff;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.step-card {
+    background-color: #f8fbff;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+    background: linear-gradient(135deg, #3fa9f5 0%, #55d6aa 100%);
+    color: #ffffff;
+    font-size: 1.4rem;
+}
+
+.step-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #002b5c;
+    margin-bottom: 8px;
+}
+
+.step-text {
+    font-size: 0.95rem;
+    color: #666;
+}
+
 /* --- Responsive (Móvil) --- */
 @media (max-width: 768px) {
     .hero-container {
@@ -168,5 +277,17 @@ body {
     
     .hero-image {
         margin-top: 30px;
+    }
+
+    .specialists-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section {
+        padding: 60px 0;
     }
 }

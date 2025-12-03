@@ -1,6 +1,5 @@
 package com.grupoTelemedicina.PlataformaTelemedicina.controller;
 
-import com.grupoTelemedicina.PlataformaTelemedicina.Model.Persona;
 import com.grupoTelemedicina.PlataformaTelemedicina.dto.PacienteDTO;
 import com.grupoTelemedicina.PlataformaTelemedicina.dto.RegistroPacienteForm;
 import com.grupoTelemedicina.PlataformaTelemedicina.repository.PersonaRepository;
@@ -12,10 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 public class AuthController {
@@ -28,11 +24,24 @@ public class AuthController {
         this.personaRepository = personaRepository;
     }
 
+    /**
+     * Muestra la página de login.
+     *
+     * Nota importante: el procesamiento del formulario de login (POST /login)
+     * lo maneja directamente Spring Security según lo definido en SecurityConfig,
+     * por eso aquí solo devolvemos la vista.
+     */
     @GetMapping("/login")
     public String mostrarLogin(Model model) {
         return "login";
     }
 
+    /**
+     * Muestra el formulario de registro de paciente.
+     *
+     * Si es la primera vez que se carga, inicializa un objeto RegistroPacienteForm
+     * que se enlaza con los campos del formulario en registro.html.
+     */
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
         if (!model.containsAttribute("registroForm")) {
@@ -41,6 +50,16 @@ public class AuthController {
         return "registro";
     }
 
+    /**
+     * Procesa el envío del formulario de registro.
+     *
+     * Flujo de registro:
+     * - Valida que las contraseñas coincidan y que el DNI/correo no estén repetidos.
+     * - Si hay errores, vuelve a la vista de registro mostrando los mensajes.
+     * - Si todo es correcto, construye un PacienteDTO y llama a PacienteService.crearPaciente,
+     *   que es donde se crean las entidades Persona y Paciente y se encripta la contraseña.
+     * - Finalmente redirige al login con un mensaje de registro exitoso.
+     */
     @PostMapping("/registro")
     public String procesarRegistro(@Valid @ModelAttribute("registroForm") RegistroPacienteForm form,
                                    BindingResult bindingResult,

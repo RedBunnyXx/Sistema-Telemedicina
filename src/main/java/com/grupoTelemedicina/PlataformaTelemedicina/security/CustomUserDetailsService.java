@@ -21,6 +21,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.personaRepository = personaRepository;
     }
 
+    /**
+     * Método llamado por Spring Security durante el proceso de login.
+     *
+     * Recibe el correo electrónico ingresado en el formulario y:
+     * - Busca la entidad Persona correspondiente en la base de datos.
+     * - A partir de ella construye un User de Spring con la contraseña encriptada y el rol.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Persona persona = personaRepository.findByCorreo(username)
